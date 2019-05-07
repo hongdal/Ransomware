@@ -10,7 +10,7 @@ from PyQt5.QtGui import QFont, QPixmap, QImage
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLabel, QLineEdit, QMessageBox
 from PyQt5.QtCore import pyqtSlot, Qt
 import gspread
-from oauth2client.service_account import ServiceAccountCredentials
+#from oauth2client.service_account import ServiceAccountCredentials
 from pyasn1.compat.octets import null
 from urllib.request import urlopen
 
